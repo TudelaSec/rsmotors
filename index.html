@@ -227,6 +227,11 @@
     clip-path:polygon(0 0,100% 0,100% 94%,0 100%);
   }
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;}
+  @media (max-width:880px){
+    .hero{padding:80px 0 60px;}
+    .hero-grid{grid-template-columns:1fr;gap:38px;}
+    .hero-panel{clip-path:none;}
+  }
   .eyebrow{
     font-family:'Space Mono',monospace;font-size:12px;color:var(--boost);
     letter-spacing:.08em;margin-bottom:16px;display:flex;align-items:center;gap:9px;
@@ -280,15 +285,19 @@
     100%{transform:translateX(-160vw);opacity:0;}
   }
   .car-rig{
-    position:absolute;bottom:16px;left:-260px;width:220px;
+    position:absolute;bottom:16px;left:0;width:220px;
+    will-change:transform;
+    transform:translateX(-320px) scaleX(1.06);
     animation:driveby 5.5s cubic-bezier(.45,0,.2,1) infinite;
     filter:drop-shadow(0 8px 10px rgba(0,0,0,.5));
   }
   @keyframes driveby{
-    0%{left:-260px;}
-    55%{left:52%;transform:translateX(-50%);}
-    58%{left:52%;transform:translateX(-50%);}
-    100%{left:112%;transform:translateX(0);}
+    0%{transform:translateX(-320px) scaleX(1.06);}
+    8%{transform:translateX(-320px) scaleX(1.06);}
+    46%{transform:translateX(calc(50vw - 50% - 30px)) scaleX(.95);}
+    54%{transform:translateX(calc(50vw - 50%)) scaleX(1);}
+    64%{transform:translateX(calc(50vw - 50%)) scaleX(1.1);}
+    100%{transform:translateX(calc(100vw + 320px)) scaleX(1.05);}
   }
   .car-rig .wheel{transform-origin:center;animation:wheelspin .35s linear infinite;}
   .car-rig .headlight{animation:headglow 1.4s ease-in-out infinite;}
@@ -296,15 +305,20 @@
   @keyframes headglow{0%,100%{opacity:.6;}50%{opacity:1;}}
   @media (prefers-reduced-motion: reduce){
     .car-rig,.lines span{animation:none;}
-    .car-rig{left:38%;}
+    .car-rig{transform:translateX(calc(50vw - 50%));}
   }
-  @media (max-width:600px){.speed-strip{height:104px;}.car-rig{width:170px;}}
+  @media (max-width:600px){.speed-strip{height:112px;}.car-rig{width:170px;}}
 
   /* ---------- SECTION HEADS ---------- */
   .section-head{max-width:60ch;margin-bottom:48px;}
   .section-tag{font-family:'Space Mono',monospace;font-size:12px;color:var(--boost);letter-spacing:.08em;margin-bottom:10px;display:block;}
   .section-head h2{font-size:clamp(28px,3.4vw,38px);}
   section.pad{padding:90px 0;}
+  @media (max-width:600px){
+    .wrap{padding:0 20px;}
+    section.pad{padding:60px 0;}
+    .section-head{margin-bottom:34px;}
+  }
   .bg-alt{background:var(--bg-alt);}
 
   /* ---------- SERVICIOS ---------- */
