@@ -17,8 +17,8 @@
     --line:#383d46;
     --text:#edece7;
     --text-dim:#9aa0a8;
-    --boost:#37c9ee;
-    --boost-dim:#1f5b6e;
+    --boost:#ff3344;
+    --boost-dim:#6e131c;
     --redline:#ff6a2b;
     --whatsapp:#25d366;
     --maxw:1180px;
@@ -55,12 +55,34 @@
   /* ---------- INTRO OVERLAY ---------- */
   #intro{
     position:fixed;inset:0;z-index:999;
-    background:radial-gradient(ellipse at center, #1b2530 0%, #0c0d10 72%);
+    background:radial-gradient(ellipse at center, #241413 0%, #0c0d10 72%);
     display:flex;align-items:center;justify-content:center;flex-direction:column;
     transition:opacity .6s ease, visibility .6s ease;
+    overflow:hidden;
   }
   #intro.hide{opacity:0;visibility:hidden;pointer-events:none;}
-  .turbo-stage{position:relative;width:220px;height:220px;}
+  #intro .flash{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle, rgba(255,110,30,.55), transparent 58%);
+    opacity:0;animation:flashPulse .55s ease-out forwards;animation-delay:1.5s;
+  }
+  @keyframes flashPulse{0%{opacity:0;}25%{opacity:1;}100%{opacity:0;}}
+  .turbo-stage{
+    position:relative;width:220px;height:220px;
+    animation:stageShake .45s ease-in-out;animation-delay:1.5s;
+  }
+  @keyframes stageShake{
+    0%,100%{transform:translate(0,0);}
+    20%{transform:translate(-4px,3px);}
+    40%{transform:translate(4px,-3px);}
+    60%{transform:translate(-3px,2px);}
+    80%{transform:translate(3px,-2px);}
+  }
+  .boom{
+    position:absolute;inset:-50px;border-radius:50%;
+    border:3px solid #ff8a3d;opacity:0;
+    animation:boomBurst .65s ease-out forwards;animation-delay:1.5s;
+  }
   .wave{
     position:absolute;inset:0;border-radius:50%;
     border:1px solid var(--boost);opacity:0;
@@ -72,6 +94,10 @@
     0%{transform:scale(.5);opacity:.55;}
     100%{transform:scale(1.9);opacity:0;}
   }
+  @keyframes boomBurst{
+    0%{transform:scale(.25);opacity:.95;}
+    100%{transform:scale(1.7);opacity:0;}
+  }
   .turbo-wheel{
     width:100%;height:100%;overflow:visible;
     filter:drop-shadow(0 0 6px var(--boost-dim));
@@ -79,28 +105,55 @@
   }
   @keyframes spool{
     0%{transform:rotate(0deg);filter:drop-shadow(0 0 2px var(--boost-dim));}
-    70%{transform:rotate(1080deg);filter:drop-shadow(0 0 22px var(--boost));}
-    100%{transform:rotate(1620deg);filter:drop-shadow(0 0 14px var(--boost));}
+    70%{transform:rotate(1080deg);filter:drop-shadow(0 0 26px var(--boost)) drop-shadow(0 0 46px #ff5a1a);}
+    100%{transform:rotate(1620deg);filter:drop-shadow(0 0 18px var(--boost)) drop-shadow(0 0 30px #ff5a1a);}
   }
-  .blade{fill:#3a4048;stroke:#4a515c;stroke-width:1;}
+  .blade{fill:#3a2422;stroke:#5a2f28;stroke-width:1;}
+
+  .embers{position:absolute;inset:0;pointer-events:none;}
+  .embers span{
+    position:absolute;bottom:48%;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle, #fff3b0, #ff6a2b 55%, transparent 72%);
+    opacity:0;animation:emberRise 1.5s ease-out 2;
+  }
+  .embers span:nth-child(1){left:38%;--dx:-18px;animation-delay:1.55s;}
+  .embers span:nth-child(2){left:47%;--dx:8px;animation-delay:1.7s;}
+  .embers span:nth-child(3){left:55%;--dx:-6px;animation-delay:1.6s;}
+  .embers span:nth-child(4){left:62%;--dx:20px;animation-delay:1.85s;}
+  .embers span:nth-child(5){left:44%;--dx:-24px;animation-delay:1.95s;}
+  .embers span:nth-child(6){left:58%;--dx:14px;animation-delay:2.05s;}
+  .embers span:nth-child(7){left:50%;--dx:2px;animation-delay:1.5s;}
+  .embers span:nth-child(8){left:35%;--dx:-10px;animation-delay:2.15s;}
+  @keyframes emberRise{
+    0%{opacity:0;transform:translate(0,0) scale(.7);}
+    18%{opacity:1;}
+    100%{opacity:0;transform:translate(var(--dx,0),-100px) scale(.2);}
+  }
 
   .flame-ring{
-    opacity:0;filter:drop-shadow(0 0 12px #ff7a1a);
-    animation:flamesAppear .35s ease forwards;
-    animation-delay:1.55s;
+    opacity:0;filter:drop-shadow(0 0 14px #ff5a1a);
+    animation:flamesAppear .3s ease forwards;
+    animation-delay:1.5s;
+  }
+  .flame-ring.outer{
+    opacity:0;filter:drop-shadow(0 0 10px #ffb347);
+    animation:flamesAppear .3s ease forwards;
+    animation-delay:1.62s;
   }
   @keyframes flamesAppear{to{opacity:1;}}
-  .flame{transform-origin:100px 4px;animation:flicker .32s ease-in-out infinite;}
-  .flame:nth-child(2n){animation-duration:.4s;animation-delay:.05s;}
-  .flame:nth-child(3n){animation-duration:.26s;animation-delay:.12s;}
+  .flame{transform-origin:100px 4px;animation:flicker .3s ease-in-out infinite;}
+  .flame:nth-child(2n){animation-duration:.38s;animation-delay:.05s;}
+  .flame:nth-child(3n){animation-duration:.24s;animation-delay:.12s;}
+  .flame-ring.outer .flame{animation-duration:.42s;}
   @keyframes flicker{
     0%,100%{transform:scaleY(1) scaleX(1) rotate(0deg);}
-    35%{transform:scaleY(1.3) scaleX(.82) rotate(-4deg);}
-    65%{transform:scaleY(.82) scaleX(1.12) rotate(5deg);}
+    35%{transform:scaleY(1.35) scaleX(.8) rotate(-5deg);}
+    65%{transform:scaleY(.8) scaleX(1.15) rotate(6deg);}
   }
   @media (prefers-reduced-motion: reduce){
-    .flame-ring{opacity:1;animation:none;}
+    .flame-ring,.flame-ring.outer{opacity:1;animation:none;}
     .flame{animation:none;}
+    .embers span,#intro .flash,.turbo-stage,.boom{animation:none;opacity:0;}
   }
   .intro-label{
     margin-top:34px;text-align:center;
@@ -141,8 +194,13 @@
   @media (prefers-reduced-motion: reduce){.brand-mark{animation:none;}}
   .brand span{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:19px;letter-spacing:.02em;}
   .navlinks{display:flex;gap:30px;list-style:none;margin:0;padding:0;}
-  .navlinks a{font-size:14.5px;text-decoration:none;color:var(--text-dim);transition:color .2s;}
+  .navlinks a{font-size:14.5px;text-decoration:none;color:var(--text-dim);transition:color .2s;position:relative;}
+  .navlinks a::after{
+    content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;
+    background:var(--boost);transition:width .25s ease;
+  }
   .navlinks a:hover{color:var(--boost);}
+  .navlinks a:hover::after{width:100%;}
   .nav-cta{
     background:var(--redline);color:#191008;text-decoration:none;
     padding:9px 18px;font-weight:600;font-size:14px;border-radius:2px;white-space:nowrap;
@@ -369,20 +427,37 @@
   @media (prefers-reduced-motion: reduce){
     .split-text .ltr{opacity:1 !important;transform:none !important;animation:none !important;}
   }
+
+  /* ---------- HERO TEXT FADE ---------- */
+  .hf{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .hero-fade-group.run .hf{opacity:1;transform:translateY(0);}
+  .hf.d1{transition-delay:.05s;}
+  .hf.d2{transition-delay:.55s;}
+  .hf.d3{transition-delay:.8s;}
+  .hf.d4{transition-delay:.35s;}
+  @media (prefers-reduced-motion: reduce){
+    .hf{opacity:1 !important;transform:none !important;transition:none !important;}
+  }
 </style>
 </head>
 <body>
 
 <!-- ================= INTRO ANIMATION ================= -->
 <div id="intro" aria-hidden="true">
+  <div class="flash"></div>
   <div class="turbo-stage">
     <span class="wave w1"></span>
     <span class="wave w2"></span>
     <span class="wave w3"></span>
+    <span class="boom"></span>
+    <div class="embers">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
     <svg class="turbo-wheel" viewBox="0 0 200 200">
       <defs>
         <radialGradient id="hub" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="#7fdcf4"/>
+          <stop offset="0%" stop-color="#ffb199"/>
           <stop offset="55%" stop-color="#1c2830"/>
           <stop offset="100%" stop-color="#0e1216"/>
         </radialGradient>
@@ -404,15 +479,25 @@
         <path class="blade" d="M100,100 L96,26 Q112,44 104,74 Z" transform="rotate(315 100 100)"/>
       </g>
       <circle cx="100" cy="100" r="22" fill="url(#hub)" stroke="#4a5561" stroke-width="1.5"/>
+      <g class="flame-ring outer">
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(22.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(67.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(112.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(157.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(202.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(247.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(292.5 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" opacity=".8" d="M100,2 C90,-14 93,-30 100,-44 C107,-30 110,-14 100,2 Z" transform="rotate(337.5 100 100)"/>
+      </g>
       <g class="flame-ring">
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(0 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(45 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(90 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(135 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(180 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(225 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(270 100 100)"/>
-        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(315 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(0 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(45 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(90 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(135 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(180 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(225 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(270 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C91,-12 94,-26 100,-38 C106,-26 109,-12 100,4 Z" transform="rotate(315 100 100)"/>
       </g>
     </svg>
   </div>
@@ -429,8 +514,8 @@
   <nav>
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="96" fill="none" stroke="#37c9ee" stroke-width="6"/>
-        <circle cx="100" cy="100" r="20" fill="#37c9ee"/>
+        <circle cx="100" cy="100" r="96" fill="none" stroke="#ff3344" stroke-width="6"/>
+        <circle cx="100" cy="100" r="20" fill="#ff3344"/>
       </svg>
       <span>RS Motors</span>
     </div>
@@ -447,19 +532,19 @@
 
 <!-- ================= HERO ================= -->
 <section class="hero">
-  <div class="wrap hero-grid">
+  <div class="wrap hero-grid hero-fade-group" id="hero-fade-group">
     <div>
-      <span class="eyebrow">Mecánica automotriz en Puente Alto</span>
+      <span class="eyebrow hf d1">Mecánica automotriz en Puente Alto</span>
       <h1 class="split-text" id="hero-title">Tu auto entra con una falla,<br>sale con <em>presión de sobra.</em></h1>
-      <p class="lead">Diagnóstico, motor, embrague, frenos y preparación deportiva. Trabajo de taller serio, explicado en simple y cotizado por WhatsApp antes de tocar el auto.</p>
-      <div class="hero-actions">
+      <p class="lead hf d2">Diagnóstico, motor, embrague, frenos y preparación deportiva. Trabajo de taller serio, explicado en simple y cotizado por WhatsApp antes de tocar el auto.</p>
+      <div class="hero-actions hf d3">
         <a class="btn btn-primary" href="https://wa.me/56986427040?text=Hola%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener">
           Escribir por WhatsApp
         </a>
         <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
       </div>
     </div>
-    <div class="hero-panel">
+    <div class="hero-panel hf d4">
       <div class="row"><span>Dirección</span><span>Lord Bacon 428</span></div>
       <div class="row"><span>Comuna</span><span>Puente Alto</span></div>
       <div class="row"><span>Mecánico jefe</span><span>J. Ramírez</span></div>
@@ -475,23 +560,37 @@
     </div>
     <div class="ground"></div>
     <svg class="car-rig" viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="110" cy="80" rx="90" ry="6" fill="#000" opacity=".35"/>
-      <path d="M12,58 C14,40 30,32 50,30 L78,14 C92,7 118,6 134,12 L162,26 C178,30 196,34 202,46 L204,58 Z" fill="#e2481f"/>
-      <path d="M78,14 L92,15 C102,16 112,18 120,24 L134,32 L88,32 Z" fill="#7fdcf4" opacity=".85"/>
-      <rect x="12" y="52" width="196" height="10" rx="3" fill="#c73b16"/>
-      <circle class="headlight" cx="204" cy="50" r="4.5" fill="#ffe9c2"/>
-      <rect x="18" y="45" width="14" height="5" rx="1.5" fill="#2a1610"/>
-      <g class="wheel" transform-origin="54 68">
-        <circle cx="54" cy="68" r="16" fill="#15171a" stroke="#4a515c" stroke-width="2"/>
-        <circle cx="54" cy="68" r="6" fill="#8b929c"/>
-        <rect x="52.5" y="54" width="3" height="28" fill="#4a515c"/>
-        <rect x="40" y="66.5" width="28" height="3" fill="#4a515c"/>
+      <ellipse cx="110" cy="80" rx="92" ry="6" fill="#000" opacity=".35"/>
+      <!-- carrocería: hatchback blanco, tipo Starlet -->
+      <path d="M17,60 C17,51 20,45 27,42 L42,36 L49,23 C53,16 61,13 70,13 L127,13 C135,13 141,16 145,22 L151,35 L179,39 C193,41 201,47 203,55 L204,60 Z" fill="#f4f4f1" stroke="#c7c7c3" stroke-width="1.5"/>
+      <!-- vidrios -->
+      <path d="M52,22 C55,18 60,16 66,16 L122,16 C129,16 135,19 139,25 L143,33 L50,33 Z" fill="#7fa7b3" opacity=".92"/>
+      <rect x="94" y="16" width="4" height="17" fill="#e7e7e4"/>
+      <path d="M96,34 L98,60" stroke="#c7c7c3" stroke-width="1"/>
+      <!-- franja roja lateral -->
+      <rect x="17" y="49" width="187" height="6" fill="#e6222f"/>
+      <!-- zócalo -->
+      <rect x="15" y="56" width="190" height="7" rx="2" fill="#1c1d1f"/>
+      <!-- manija -->
+      <rect x="110" y="41" width="10" height="3" rx="1.5" fill="#9a9a97"/>
+      <!-- óptica trasera -->
+      <rect x="18" y="43" width="6" height="8" rx="1.5" fill="#c0392b"/>
+      <!-- óptica delantera -->
+      <rect x="195" y="43" width="9" height="7" rx="2" class="headlight" fill="#ffe9c2"/>
+      <!-- arcos de rueda -->
+      <circle cx="53" cy="68" r="19" fill="#dcdcd9"/>
+      <circle cx="166" cy="68" r="19" fill="#dcdcd9"/>
+      <g class="wheel" transform-origin="53 68">
+        <circle cx="53" cy="68" r="16" fill="#15171a" stroke="#4a515c" stroke-width="2"/>
+        <circle cx="53" cy="68" r="6" fill="#8b929c"/>
+        <rect x="51.5" y="54" width="3" height="28" fill="#4a515c"/>
+        <rect x="39" y="66.5" width="28" height="3" fill="#4a515c"/>
       </g>
-      <g class="wheel" transform-origin="162 68">
-        <circle cx="162" cy="68" r="16" fill="#15171a" stroke="#4a515c" stroke-width="2"/>
-        <circle cx="162" cy="68" r="6" fill="#8b929c"/>
-        <rect x="160.5" y="54" width="3" height="28" fill="#4a515c"/>
-        <rect x="148" y="66.5" width="28" height="3" fill="#4a515c"/>
+      <g class="wheel" transform-origin="166 68">
+        <circle cx="166" cy="68" r="16" fill="#15171a" stroke="#4a515c" stroke-width="2"/>
+        <circle cx="166" cy="68" r="6" fill="#8b929c"/>
+        <rect x="164.5" y="54" width="3" height="28" fill="#4a515c"/>
+        <rect x="152" y="66.5" width="28" height="3" fill="#4a515c"/>
       </g>
     </svg>
   </div>
@@ -589,7 +688,7 @@
 <!-- ================= UBICACION ================= -->
 <section class="pad" id="ubicacion">
   <div class="wrap loc-grid reveal">
-    <div class="loc-info">
+    <div class="loc-info reveal-stagger">
       <span class="section-tag">Encuéntranos</span>
       <h2 class="split-text" style="margin-bottom:26px;">Puente Alto, Santiago</h2>
       <div class="item">
@@ -651,7 +750,7 @@
         <p class="form-msg" id="form-msg"></p>
       </form>
     </div>
-    <div class="contact-side">
+    <div class="contact-side reveal-stagger">
       <div class="quick">
         <h3>Respuesta directa</h3>
         <p>Este formulario abre WhatsApp con tu mensaje ya escrito, listo para enviar. No pasa por correo ni se pierde en una bandeja de entrada.</p>
@@ -720,6 +819,7 @@
     var skip = document.getElementById('skip-intro');
     var introTitle = document.getElementById('intro-title');
     var heroTitle = document.getElementById('hero-title');
+    var heroFade = document.getElementById('hero-fade-group');
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var already = false;
     try { already = sessionStorage.getItem('rsm_intro_shown') === '1'; } catch(e){}
@@ -727,16 +827,18 @@
     function closeIntro(){
       intro.classList.add('hide');
       if (heroTitle) heroTitle.classList.add('run');
+      if (heroFade) heroFade.classList.add('run');
       try { sessionStorage.setItem('rsm_intro_shown','1'); } catch(e){}
     }
 
     if (reduced || already){
       intro.classList.add('hide');
       if (heroTitle) heroTitle.classList.add('run');
+      if (heroFade) heroFade.classList.add('run');
     } else {
       if (introTitle) setTimeout(function(){ introTitle.classList.add('run'); }, 850);
-      var fallback = setTimeout(closeIntro, 3800); // evita que la animación deje la pantalla trabada
-      setTimeout(closeIntro, 2900);
+      var fallback = setTimeout(closeIntro, 4200); // evita que la animación deje la pantalla trabada
+      setTimeout(closeIntro, 3300);
       skip.addEventListener('click', function(){
         clearTimeout(fallback);
         closeIntro();
