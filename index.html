@@ -73,7 +73,7 @@
     100%{transform:scale(1.9);opacity:0;}
   }
   .turbo-wheel{
-    width:100%;height:100%;
+    width:100%;height:100%;overflow:visible;
     filter:drop-shadow(0 0 6px var(--boost-dim));
     animation:spool 2.4s cubic-bezier(.32,.09,.24,1) 1;
   }
@@ -83,6 +83,25 @@
     100%{transform:rotate(1620deg);filter:drop-shadow(0 0 14px var(--boost));}
   }
   .blade{fill:#3a4048;stroke:#4a515c;stroke-width:1;}
+
+  .flame-ring{
+    opacity:0;filter:drop-shadow(0 0 12px #ff7a1a);
+    animation:flamesAppear .35s ease forwards;
+    animation-delay:1.55s;
+  }
+  @keyframes flamesAppear{to{opacity:1;}}
+  .flame{transform-origin:100px 4px;animation:flicker .32s ease-in-out infinite;}
+  .flame:nth-child(2n){animation-duration:.4s;animation-delay:.05s;}
+  .flame:nth-child(3n){animation-duration:.26s;animation-delay:.12s;}
+  @keyframes flicker{
+    0%,100%{transform:scaleY(1) scaleX(1) rotate(0deg);}
+    35%{transform:scaleY(1.3) scaleX(.82) rotate(-4deg);}
+    65%{transform:scaleY(.82) scaleX(1.12) rotate(5deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flame-ring{opacity:1;animation:none;}
+    .flame{animation:none;}
+  }
   .intro-label{
     margin-top:34px;text-align:center;
     opacity:0;animation:fadeUp .7s ease .9s forwards;
@@ -338,6 +357,18 @@
   .reveal-stagger > *:nth-child(11){transition-delay:.52s;}
   .reveal-stagger > *:nth-child(12){transition-delay:.57s;}
   .reveal-stagger > *:nth-child(13){transition-delay:.62s;}
+
+  /* ---------- LETTER ANIMATION ---------- */
+  .split-text .ltr{
+    display:inline-block;opacity:0;transform:translateY(16px) rotate(3deg);
+  }
+  .split-text.run .ltr{
+    animation:letterIn .5s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  @keyframes letterIn{to{opacity:1;transform:translateY(0) rotate(0);}}
+  @media (prefers-reduced-motion: reduce){
+    .split-text .ltr{opacity:1 !important;transform:none !important;animation:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -355,6 +386,11 @@
           <stop offset="55%" stop-color="#1c2830"/>
           <stop offset="100%" stop-color="#0e1216"/>
         </radialGradient>
+        <linearGradient id="fireGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff3b0"/>
+          <stop offset="45%" stop-color="#ff9d2e"/>
+          <stop offset="100%" stop-color="#e8380d"/>
+        </linearGradient>
       </defs>
       <circle cx="100" cy="100" r="96" fill="none" stroke="#2b2f36" stroke-width="2"/>
       <g class="blades">
@@ -368,11 +404,21 @@
         <path class="blade" d="M100,100 L96,26 Q112,44 104,74 Z" transform="rotate(315 100 100)"/>
       </g>
       <circle cx="100" cy="100" r="22" fill="url(#hub)" stroke="#4a5561" stroke-width="1.5"/>
+      <g class="flame-ring">
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(0 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(45 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(90 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(135 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(180 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(225 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(270 100 100)"/>
+        <path class="flame" fill="url(#fireGrad)" d="M100,4 C93,-8 95,-20 100,-30 C105,-20 107,-8 100,4 Z" transform="rotate(315 100 100)"/>
+      </g>
     </svg>
   </div>
   <div class="intro-label">
     <span class="tag">PUENTE ALTO · TALLER MECÁNICO</span>
-    <h1>RS Motors</h1>
+    <h1 class="split-text" id="intro-title">RS Motors</h1>
     <span class="sub">Ramírez &amp; San Martín</span>
   </div>
   <button id="skip-intro" type="button">Saltar animación →</button>
@@ -395,7 +441,7 @@
       <li><a href="#ubicacion">Ubicación</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
-    <a class="nav-cta" href="https://wa.me/56900000000" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+    <a class="nav-cta" href="https://wa.me/56986427040" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
   </nav>
 </header>
 
@@ -404,10 +450,10 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow">Mecánica automotriz en Puente Alto</span>
-      <h1>Tu auto entra con una falla,<br>sale con <em>presión de sobra.</em></h1>
+      <h1 class="split-text" id="hero-title">Tu auto entra con una falla,<br>sale con <em>presión de sobra.</em></h1>
       <p class="lead">Diagnóstico, motor, embrague, frenos y preparación deportiva. Trabajo de taller serio, explicado en simple y cotizado por WhatsApp antes de tocar el auto.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="https://wa.me/56900000000?text=Hola%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener">
+        <a class="btn btn-primary" href="https://wa.me/56986427040?text=Hola%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener">
           Escribir por WhatsApp
         </a>
         <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
@@ -456,7 +502,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="section-tag">Orden de trabajo</span>
-      <h2>Lo que hacemos en el taller</h2>
+      <h2 class="split-text">Lo que hacemos en el taller</h2>
     </div>
     <div class="service-list reveal-stagger">
 
@@ -521,7 +567,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="section-tag">Quién revisa tu auto</span>
-      <h2>El equipo del taller</h2>
+      <h2 class="split-text">El equipo del taller</h2>
     </div>
     <div class="crew reveal-stagger">
       <div class="crew-card">
@@ -545,7 +591,7 @@
   <div class="wrap loc-grid reveal">
     <div class="loc-info">
       <span class="section-tag">Encuéntranos</span>
-      <h2 style="margin-bottom:26px;">Puente Alto, Santiago</h2>
+      <h2 class="split-text" style="margin-bottom:26px;">Puente Alto, Santiago</h2>
       <div class="item">
         <span class="ic">📍</span>
         <div><h3>Dirección</h3><p>Lord Bacon 428, Puente Alto, Región Metropolitana</p></div>
@@ -572,7 +618,7 @@
   <div class="wrap contact-grid reveal">
     <div>
       <span class="section-tag">Cotiza tu servicio</span>
-      <h2 style="margin-bottom:22px;">Cuéntanos qué le pasa a tu auto</h2>
+      <h2 class="split-text" style="margin-bottom:22px;">Cuéntanos qué le pasa a tu auto</h2>
       <form id="contact-form">
         <div>
           <label for="nombre">Nombre</label>
@@ -611,10 +657,16 @@
         <p>Este formulario abre WhatsApp con tu mensaje ya escrito, listo para enviar. No pasa por correo ni se pierde en una bandeja de entrada.</p>
       </div>
       <div class="quick">
-        <h3>¿Prefieres llamar?</h3>
-        <p>También puedes escribirnos directo al <strong>+56 9 0000 0000</strong> (reemplazar por el número real del taller).</p>
+        <h3>Juan Ramírez</h3>
+        <p>Motor, diagnóstico y mecánica deportiva.</p>
+        <a class="btn btn-ghost" style="margin-top:10px;width:100%;justify-content:center;" href="https://wa.me/56986427040?text=Hola%20Juan%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener">+56 9 8642 7040</a>
       </div>
-      <a class="btn btn-primary" style="width:100%;justify-content:center;" href="https://wa.me/56900000000" target="_blank" rel="noopener">Abrir WhatsApp ahora</a>
+      <div class="quick">
+        <h3>Benjamín San Martín</h3>
+        <p>Embrague, frenos, tren delantero e inspección pre-compra.</p>
+        <a class="btn btn-ghost" style="margin-top:10px;width:100%;justify-content:center;" href="https://wa.me/56942527521?text=Hola%20Benjam%C3%ADn%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener">+56 9 4252 7521</a>
+      </div>
+      <a class="btn btn-primary" style="width:100%;justify-content:center;" href="https://wa.me/56986427040" target="_blank" rel="noopener">Abrir WhatsApp ahora</a>
     </div>
   </div>
 </section>
@@ -626,7 +678,7 @@
   </div>
 </footer>
 
-<a id="wa-float" href="https://wa.me/56900000000?text=Hola%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+<a id="wa-float" href="https://wa.me/56986427040?text=Hola%2C%20quiero%20cotizar%20un%20servicio" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
   <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
     <path d="M16 3C9.1 3 3.5 8.6 3.5 15.5c0 2.5.7 4.8 1.9 6.8L3 29l6.9-2.3c1.9 1 4 1.6 6.1 1.6 6.9 0 12.5-5.6 12.5-12.5S22.9 3 16 3z" fill="#fff"/>
     <path d="M16 4.6C9.9 4.6 5 9.5 5 15.6c0 2.3.7 4.4 1.9 6.2l-1.3 4.9 5-1.3c1.7 1 3.7 1.6 5.8 1.6 6.1 0 11-4.9 11-11S22.1 4.6 16 4.6z" fill="#25D366"/>
@@ -635,22 +687,54 @@
 </a>
 
 <script>
+  // ---- Letter-split animation ----
+  function splitLetters(el){
+    if (!el || el.dataset.split) return;
+    el.dataset.split = '1';
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(child){
+        if (child.nodeType === Node.TEXT_NODE){
+          var frag = document.createDocumentFragment();
+          child.textContent.split('').forEach(function(ch){
+            var span = document.createElement('span');
+            span.className = 'ltr';
+            span.textContent = (ch === ' ') ? '\u00A0' : ch;
+            frag.appendChild(span);
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR'){
+          walk(child);
+        }
+      });
+    })(el);
+    el.querySelectorAll('.ltr').forEach(function(span, i){
+      span.style.animationDelay = (i * 0.03) + 's';
+    });
+  }
+
+  document.querySelectorAll('.split-text').forEach(splitLetters);
+
   // ---- Intro overlay ----
   (function(){
     var intro = document.getElementById('intro');
     var skip = document.getElementById('skip-intro');
+    var introTitle = document.getElementById('intro-title');
+    var heroTitle = document.getElementById('hero-title');
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var already = false;
     try { already = sessionStorage.getItem('rsm_intro_shown') === '1'; } catch(e){}
 
     function closeIntro(){
       intro.classList.add('hide');
+      if (heroTitle) heroTitle.classList.add('run');
       try { sessionStorage.setItem('rsm_intro_shown','1'); } catch(e){}
     }
 
     if (reduced || already){
       intro.classList.add('hide');
+      if (heroTitle) heroTitle.classList.add('run');
     } else {
+      if (introTitle) setTimeout(function(){ introTitle.classList.add('run'); }, 850);
       var fallback = setTimeout(closeIntro, 3800); // evita que la animación deje la pantalla trabada
       setTimeout(closeIntro, 2900);
       skip.addEventListener('click', function(){
@@ -680,7 +764,7 @@
   (function(){
     var form = document.getElementById('contact-form');
     var msg = document.getElementById('form-msg');
-    var WA_NUMBER = '56900000000'; // reemplazar por el número real, formato 56 9 XXXX XXXX
+    var WA_NUMBER = '56986427040'; // reemplazar por el número real, formato 56 9 XXXX XXXX
     form.addEventListener('submit', function(e){
       e.preventDefault();
       var nombre = document.getElementById('nombre').value.trim();
@@ -708,6 +792,10 @@
       entries.forEach(function(entry){
         if (entry.isIntersecting){
           entry.target.classList.add('in');
+          var heading = entry.target.classList.contains('split-text')
+            ? entry.target
+            : entry.target.querySelector('.split-text');
+          if (heading) heading.classList.add('run');
           io.unobserve(entry.target);
         }
       });
